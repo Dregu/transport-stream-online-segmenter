@@ -69,17 +69,19 @@ class hls_chunklist {
         this.target_duration_s = this._calcTargetDuration();
 
         ret.push('#EXTM3U');
-        ret.push('#EXT-X-TARGETDURATION:' + this.target_duration_s.toString());
         ret.push('#EXT-X-VERSION:6');
         ret.push('#EXT-X-MEDIA-SEQUENCE:' + this.media_sequence);
+        ret.push('#EXT-X-TARGETDURATION:' + this.target_duration_s.toString());
+        ret.push('#EXT-X-INDEPENDENT-SEGMENTS');
+        ret.push('#EXT-X-DISCONTINUITY-SEQUENCE:1');
 
-        if (this.chunklist_type === enChunklistType.VOD)
+        /*if (this.chunklist_type === enChunklistType.VOD)
             ret.push('#EXT-X-PLAYLIST-TYPE:VOD');
         else  if (this.chunklist_type === enChunklistType.LIVE_EVENT)
-            ret.push('#EXT-X-PLAYLIST-TYPE:EVENT');
+            ret.push('#EXT-X-PLAYLIST-TYPE:EVENT');*/
 
         if (this.is_splitting_chunks === false) {
-            ret.push('#EXT-X-MAP:URI="' + this.media_file_url + '",BYTERANGE="' + (this.media_info.getLastBytePos() - this.media_info.getFirstBytePos()) + '@' + this.media_info.getFirstBytePos() + '"');
+            //ret.push('#EXT-X-MAP:URI="' + this.media_file_url + '",BYTERANGE="' + (this.media_info.getLastBytePos() - this.media_info.getFirstBytePos()) + '@' + this.media_info.getFirstBytePos() + '"');
         }
         else {
             let fileName = this.media_info.getFileName();
@@ -87,15 +89,19 @@ class hls_chunklist {
             if (this.is_using_relative_path)
                 fileName = path.basename(fileName);
 
-            ret.push('#EXT-X-MAP:URI="' + fileName + '"');
+            //ret.push('#EXT-X-MAP:URI="' + fileName + '"');
         }
 
         for (let i = 0; i < this.chunks.length; i++) {
             let chunk = this.chunks[i];
             let chunk_dur_s =  chunk.getDuration();
-            if (this.is_lhls)
-                chunk_dur_s = chunk.getEstimatedDuration();
 
+            if (chunk.getEstimatedDuration() != -1) {
+                ret.push('#EXT-X-FRESH-IS-COMING');
+            }
+            if (this.is_lhls) {
+                chunk_dur_s = chunk.getEstimatedDuration();
+            }
             ret.push('#EXTINF:' + chunk_dur_s + ',');
             if (this.is_splitting_chunks === false) {
                 ret.push('#EXT-X-BYTERANGE:' + (chunk.getLastBytePos() - chunk.getFirstBytePos()) + '@' + chunk.getFirstBytePos());
