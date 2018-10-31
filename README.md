@@ -1,5 +1,7 @@
 # transport-stream-online-segmenter
 
+Edited to test [FRESH low latency hls](https://github.com/openfresh/hls.js/tree/lhls)
+
 This is a tool that allows you to create an HLS chunklist from any transport stream file.
 For the online version all the process is done inside the browser, so the input TS file are NOT uploaded anywhere making segmentation process fast and secure.
 Taking advantage of HLS v6 we can generate a byte range HLS chunklist that prevents you to modify / split your TS file.
