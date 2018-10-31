@@ -63,7 +63,7 @@ const server = net.createServer(function(socket) {
     console.log("Connected: " + socket.name);
 
     //Instantiate class
-    let session = new Date().getTime().toString();
+    let session = Date.now().toString();
     let segmenter = new chkGenerator.chunklistGenerator(true, base_path, (chunk_base_filename + session + '_'), target_dur_s, chunklist_type, def_live_window_size, lhls_advanced_chunks);
 
     //Add chunk listener

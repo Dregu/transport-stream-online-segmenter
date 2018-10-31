@@ -6,7 +6,7 @@ const tspck = require('./tspacket.js');
 "use strict";
 
 const GHOST_PREFIX_DEFAULT = ".growing_";
-const FILE_NUMBER_LENGTH_DEFAULT = 5;
+const FILE_NUMBER_LENGTH_DEFAULT = 7;
 const FILE_CHUNK_EXTENSION_DEFAULT = ".ts";
 
 Number.prototype.pad = function(size) {
